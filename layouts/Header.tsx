@@ -1,8 +1,12 @@
 import { Layout, Menu, Button } from 'antd'
+import { useWallet } from 'use-wallet'
 
 const { Header } = Layout
 
 const HeaderLayout = () => {
+    const wallet = useWallet()
+    // const { accout, binance, wallet } = useWallet()
+
     return (
         <Header>
             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
@@ -11,8 +15,14 @@ const HeaderLayout = () => {
                     return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>;
                 })}
             </Menu>
-            <Button type="primary">Connect Wallet</Button>
-
+            <Button 
+                type="primary"
+                onClick={() => {
+                    wallet.connect('injected')
+                }}
+            >
+                Connect MetaMask
+            </Button>
         </Header>
     )
 }
