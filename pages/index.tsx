@@ -7,30 +7,52 @@ import { message, Input, Button } from 'antd'
 import Web3 from 'web3'
 import { useWallet } from 'use-wallet'
 
-
 const Home: NextPage = () => {
     const wallet = useWallet()
     const { account, status } = wallet
-
     const [balanceBusd, setBlanceBusd] = useState(0)
     const [address, setAddress] = useState('')
     const [amount, setAmount] = useState('')
     const [contractWrite, setContractWrite] = useState({})
-
     const contract = getBusdContractRead()
+    const [listTranfer, setTranfer] = useState([])
 
     useEffect(() => {
-
         const init = async () => {
             if (contract && account) {
                 const balance = await (await contract).methods.balanceOf(account).call()
                 setBlanceBusd(balance)
             }
             const contractWrite = await getBusdContractWrite()
-            setContractWrite(contractWrite)
+            await getHistory()
+            await setContractWrite(contractWrite)
         }
         init()
     }, [account])
+
+    const getHistory = () => {
+        if (localStorage.getItem('transaction_' + account) !== null) {
+            let resultHistory: any = localStorage.getItem('transaction_' + account)
+            resultHistory = JSON.parse(resultHistory)
+            setTranfer(resultHistory)
+        } else {
+            setTranfer([])
+        }
+
+    }
+
+    const setTransaction = (transaction: any) => {
+        if (localStorage.getItem('transaction_' + account) !== null) {
+            let result: any = localStorage.getItem('transaction_' + account)
+            result = JSON.parse(result)
+            result.unshift(transaction)
+            localStorage.setItem('transaction_' + account, JSON.stringify(result))
+            setTranfer(result)
+        } else {
+            let result: any = [transaction]
+            localStorage.setItem('transaction_' + account, JSON.stringify(result))
+        }
+    }
 
     const sendBusd = async () => {
         if (contractWrite) {
@@ -38,6 +60,7 @@ const Home: NextPage = () => {
             contractWrite.methods.transfer(address, Web3.utils.toWei(amount)).send({ from: account })
                 .then(async (txHash: any) => {
                     message.success(txHash.transactionHash)
+                    setTransaction(txHash)
                     const balance = await (await contract).methods.balanceOf(account).call()
                     setBlanceBusd(balance)
                 }).catch((err: any) => {
@@ -59,6 +82,14 @@ const Home: NextPage = () => {
                     />
                     <Input placeholder="amount" onChange={e => setAmount(e.target.value)} />
                     <Button type="primary" onClick={sendBusd}>Send busd</Button>
+                    <p>History</p>
+                    <ul>
+                        {listTranfer.map((obj: any) => {
+                            return <li key={obj.transactionHash} ><a href={`https://testnet.bscscan.com/tx/${obj.transactionHash}`} target="_blank">{obj.transactionHash}</a></li>
+                        })
+
+                        }
+                    </ul>
                 </>
             }
 
@@ -67,7 +98,6 @@ const Home: NextPage = () => {
                     Please connect wallet
                 </>
             }
-
         </div>
     )
 }

@@ -16,9 +16,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     )
 }
 
-const Providers:React.FC = ({children}) => {
+const Providers: React.FC = ({ children }) => {
     return (
         <UseWalletProvider
+            chainId={97}
             connectors={{
                 bsc,
                 walletconnect: {

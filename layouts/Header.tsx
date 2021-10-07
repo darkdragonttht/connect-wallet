@@ -17,14 +17,26 @@ const HeaderLayout = () => {
             >
                 {account}
             </Button>}
-            {status !== 'connected' && <Button
-                type="primary"
-                onClick={() => {
-                    wallet.connect('injected')
-                }}
-            >
-                Connect MetaMask
-            </Button>}
+            {status !== 'connected' && 
+            <>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        wallet.connect('injected')
+                    }}
+                >
+                    Connect MetaMask
+                </Button>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        wallet.connect('walletconnect')
+                    }}
+                >
+                    Wallet Connect
+                </Button>
+            </>
+            }
         </Header>
     )
 }
