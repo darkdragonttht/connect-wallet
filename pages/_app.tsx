@@ -1,6 +1,6 @@
 import React from 'react'
-import bsc from '@binance-chain/bsc-use-wallet'
-import { UseWalletProvider } from 'use-wallet'
+import * as bsc from '@binance-chain/bsc-use-wallet'
+import { UseWalletProvider } from '@binance-chain/bsc-use-wallet'
 import 'antd/dist/antd.css'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
@@ -23,7 +23,7 @@ const Providers: React.FC = ({ children }) => {
             connectors={{
                 bsc,
                 walletconnect: {
-                    rpcUrl: 'https://data-seed-prebsc-s-s1.binance.org:8545'
+                    rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
                 }
             }}
         >

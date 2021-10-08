@@ -6,9 +6,10 @@ import TokenAmount from "token-amount"
 import { message, Input, Button } from 'antd'
 import Web3 from 'web3'
 import { useWallet } from 'use-wallet'
+import * as bsc from '@binance-chain/bsc-use-wallet'
 
 const Home: NextPage = () => {
-    const wallet = useWallet()
+    const wallet = bsc.useWallet()
     const { account, status } = wallet
     const [balanceBusd, setBlanceBusd] = useState(0)
     const [address, setAddress] = useState('')

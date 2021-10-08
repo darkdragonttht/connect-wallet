@@ -1,10 +1,11 @@
 import { Layout, Button } from 'antd'
-import { useWallet } from 'use-wallet'
+// import { useWallet } from 'use-wallet'
+import * as bsc from '@binance-chain/bsc-use-wallet'
 
 const { Header } = Layout
 
 const HeaderLayout = () => {
-    const wallet= useWallet()
+    const wallet = bsc.useWallet()
     const { account, status } = wallet
 
     return (
@@ -12,7 +13,9 @@ const HeaderLayout = () => {
             {status === 'connected' && <Button
                 type="primary"
                 onClick={() => {
+                    localStorage.removeItem('walletconnect')
                     wallet.reset()
+
                 }}
             >
                 {account}
@@ -22,6 +25,7 @@ const HeaderLayout = () => {
                 <Button
                     type="primary"
                     onClick={() => {
+                        // console.log(wallet, 'wallet')
                         wallet.connect('injected')
                     }}
                 >
@@ -30,6 +34,7 @@ const HeaderLayout = () => {
                 <Button
                     type="primary"
                     onClick={() => {
+                        // console.log(wallet, 'wallet')
                         wallet.connect('walletconnect')
                     }}
                 >
